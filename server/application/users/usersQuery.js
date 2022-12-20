@@ -1,4 +1,3 @@
-import { consoleDate } from "../../persistence/data/utils.js";
 import { usersCollection } from "../../persistence/context.js";
 import { responseMapping } from "../mappings/responseMapping.js";
 import { pagination } from "../../persistence/pagination.js";
@@ -13,8 +12,8 @@ const usersQuery = async (req, res, next) => {
 
   let response = responseMapping(dto, paginationUsers);
   
-  console.log("["+consoleDate+"] Fetching users")
-  res.status(201).json(response);
+  console.log("["+new Date().toLocaleString()+"] Fetching users")
+  res.status(200).json(response);
 };
 
 export default usersQuery;

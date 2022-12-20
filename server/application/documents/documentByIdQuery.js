@@ -1,7 +1,6 @@
 import { ObjectId } from "mongodb";
 
 import HttpError from "../../domain/httpError.js";
-import { consoleDate } from "../../persistence/data/utils.js";
 import { documentsCollection } from "../../persistence/context.js";
 import { documentByIdDtoMapping } from "../mappings/documentDtoMapping.js";
 import { responseObjectMapping } from "../mappings/responseMapping.js";
@@ -18,8 +17,8 @@ const documentByIdQuery = async (req, res, next) => {
   let dto = documentByIdDtoMapping(document)
   let response = responseObjectMapping(dto);
   
-  console.log("["+consoleDate+"] Fetching document")
-  res.status(201).json(response);
+  console.log("["+new Date().toLocaleString()+"] Fetching document")
+  res.status(200).json(response);
 };
 
 export default documentByIdQuery;

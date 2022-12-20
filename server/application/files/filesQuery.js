@@ -1,4 +1,3 @@
-import { consoleDate } from "../../persistence/data/utils.js";
 import { filesCollection } from "../../persistence/context.js";
 import { responseMapping } from "../mappings/responseMapping.js";
 import { pagination } from "../../persistence/pagination.js";
@@ -13,8 +12,8 @@ const filesQuery = async (req, res, next) => {
 
   let response = responseMapping(dto, paginationFiles);
   
-  console.log("["+consoleDate+"] Fetching files")
-  res.status(201).json(response);
+  console.log("["+new Date().toLocaleString()+"] Fetching files")
+  res.status(200).json(response);
 };
 
 export default filesQuery;

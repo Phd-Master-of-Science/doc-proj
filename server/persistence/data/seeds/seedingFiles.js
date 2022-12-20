@@ -1,32 +1,37 @@
 import { faker } from "@faker-js/faker";
-import fs from 'fs';
 
-import { consoleDate } from "../utils.js";
-import { filesCollection } from "../../context.js";
+import { filesCollection, filesRows, seedingsCollection, usersCollection } from "../../context.js";
+import { fromDate, toDate } from "../utils.js";
+
 
 export const seedingFiles = async () => {
-  if (!fs.existsSync("./files")){
-    fs.mkdirSync("./files")
-    console.log("["+consoleDate+"] files folder is created!")
-  }
+  const start = new Date();
 
-  for (let k = 0; k < 5; k++) {
-    let content = faker.lorem.paragraphs();
+  let users = await usersCollection.find({}).toArray();
+
+  for (let k = 0; k < filesRows; k++) {
     let filename = faker.system.commonFileName('docx');
-    fs.promises.writeFile(`./files/${filename}`, content)
-    console.log(filename);
 
     let file = {
-      Description: faker.system.commonFileName('docx'),
-      File: fs.readFileSync(`./files/${filename}`)
+      Description: filename,
+      File: faker.system.directoryPath()+"/"+filename,
+      InsertDate: faker.date.between(fromDate, toDate),
+      UserId: users[Math.floor(Math.random() * users.length)]._id
     };
 
     let result = await filesCollection.insertOne(file);
 
     if (result.acknowledged)
-      console.log("["+consoleDate+"] File successful insertion, row = " + k + ", with _id = " + result.insertedId);
+      console.log("["+new Date().toLocaleString()+"] File successful insertion, row = " + k + ", with _id = " + result.insertedId);
   }
 
-  fs.rmdirSync("./files", { recursive: true })
-  console.log("["+consoleDate+"] files folder is deleted!")
+  const duration = (new Date() - start)/60000;
+
+  const seed = { 
+    Action: "Files seeding",
+    Rows: filesRows,
+    Duration: `${duration} min`
+  };
+
+  await seedingsCollection.insertOne(seed)
 };

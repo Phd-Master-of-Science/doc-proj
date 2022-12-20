@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
 
-import { consoleDate } from "../../persistence/data/utils.js";
 import { usersCollection } from "../../persistence/context.js";
 import { responseObjectMapping } from "../mappings/responseMapping.js";
 import { userByIdDtoMapping } from "../mappings/userDtoMapping.js";
@@ -17,8 +16,8 @@ const userByIdQuery = async (req, res, next) => {
   let dto =  userByIdDtoMapping(user)
   let response = responseObjectMapping(dto);
   
-  console.log("["+consoleDate+"] Fetching user")
-  res.status(201).json(response);
+  console.log("["+new Date().toLocaleString()+"] Fetching user")
+  res.status(200).json(response);
 };
 
 export default userByIdQuery;

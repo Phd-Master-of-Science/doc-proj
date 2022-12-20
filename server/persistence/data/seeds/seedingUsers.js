@@ -1,9 +1,10 @@
 import { faker } from "@faker-js/faker";
-import { consoleDate } from "../utils.js";
-import { usersCollection } from "../../context.js";
+import { seedingsCollection, usersCollection, usersRows } from "../../context.js";
 
 export const seedingUsers = async () => {
-  for (let j = 0; j < 30; j++) {
+  const start = new Date();
+
+  for (let j = 0; j < usersRows; j++) {
     let fullName = faker.name.fullName();
 
     let user = {
@@ -20,6 +21,16 @@ export const seedingUsers = async () => {
     let result = await usersCollection.insertOne(user);
 
     if (result.acknowledged)
-      console.log("["+consoleDate+"] User successful insertion, row = " + j + ", with _id = " + result.insertedId);
+      console.log("["+new Date().toLocaleString()+"] User successful insertion, row = " + j + ", with _id = " + result.insertedId);
   }
+
+  const duration = (new Date() - start)/60000;
+
+  const seed = { 
+    Action: "Users seeding",
+    Rows: usersRows,
+    Duration: `${duration} min`
+  };
+
+  await seedingsCollection.insertOne(seed)
 };

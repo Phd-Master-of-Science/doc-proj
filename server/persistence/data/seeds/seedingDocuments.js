@@ -1,19 +1,23 @@
 import { faker } from "@faker-js/faker";
-import { actions, consoleDate } from "../utils.js";
+import { actions } from "../utils.js";
 import { fromDate, toDate } from "../utils.js";
 import { getRandomInt } from "../utils.js";
 import {
   usersCollection,
   documentsCollection,
-  filesCollection
+  filesCollection,
+  documentsRows,
+  seedingsCollection
 } from "../../context.js";
 
 export const seedingDocuments = async () => {
+  const start = new Date();
+
   let users = await usersCollection.find({}).toArray();
   let files = await filesCollection.find({}).toArray();
 
   //Seeding Documents
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < documentsRows; i++) {
     //#region Create versions
     let versionsNumber = getRandomInt(10) + 1;
     let versions = [];
@@ -83,11 +87,16 @@ export const seedingDocuments = async () => {
       versions.push(version);
     }
     //#endregion Create versions
+    
     let filesNumber = getRandomInt(5) + 1;
     let docFiles = [];
     for (let i = 0; i < filesNumber; i++) {
       let file = files[Math.floor(Math.random() * files.length)];
-      docFiles.push(file);
+      let inputFile = {
+        _id: file._id,
+        Description: file.Description
+      }
+      docFiles.push(inputFile);
     }
 
 
@@ -103,6 +112,16 @@ export const seedingDocuments = async () => {
     let res = await documentsCollection.insertOne(document);
 
     if (res.acknowledged)
-      console.log("["+consoleDate+"] Document successful insertion, row = " + i + ", with _id = " + res.insertedId);
+      console.log("["+new Date().toLocaleString()+"] Document successful insertion, row = " + i + ", with _id = " + res.insertedId);
   }
+
+  const duration = (new Date() - start)/60000;
+
+  const seed = { 
+    Action: "Documents seeding",
+    Rows: documentsRows,
+    Duration: `${duration} min`
+  };
+
+  await seedingsCollection.insertOne(seed)
 };

@@ -4,8 +4,8 @@ import { seedingUsers } from "./seeds/seedingUsers.js";
 import { seedingFiles } from "./seeds/seedingFiles.js";
 
 export async function seedings() {
-  await seedingFiles();
   await seedingUsers();
+  await seedingFiles();
   await seedingDocuments();
   await seedingDirectories();
 }

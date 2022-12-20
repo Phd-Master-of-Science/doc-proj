@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 import HttpError from "../../domain/httpError.js";
-import { actions, consoleDate } from "../../persistence/data/utils.js";
+import { actions } from "../../persistence/data/utils.js";
 import { documentsCollection, usersCollection } from "../../persistence/context.js";
 import { documentFilter } from "../filters/documentFilter.js";
 import { documentDtoMapping } from "../mappings/documentDtoMapping.js";
@@ -35,8 +35,8 @@ const documentsQuery = async (req, res, next) => {
 
   let response = responseMapping(dto, paginationDocument);
   
-  console.log("["+consoleDate+"] Fetching documents action = ("+action+") , userId = ("+userId+")")
-  res.status(201).json(response);
+  console.log("["+new Date().toLocaleString()+"] Fetching documents action = ("+action+") , userId = ("+userId+")")
+  res.status(200).json(response);
 };
 
 export default documentsQuery;

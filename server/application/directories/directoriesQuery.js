@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 import HttpError from "../../domain/httpError.js";
-import { actions, consoleDate } from "../../persistence/data/utils.js";
+import { actions } from "../../persistence/data/utils.js";
 import { directoriesCollection, usersCollection } from "../../persistence/context.js";
 import { directoryFilter } from "../filters/directoryFilter.js";
 import { directoryDtoMapping } from "../mappings/directoryDtoMapping.js";
@@ -35,8 +35,8 @@ const directoriesQuery = async (req, res, next) => {
 
   let response = responseMapping(dto, paginationDocument);
   
-  console.log("["+consoleDate+"] Fetching directories action = ("+action+") , userId = ("+userId+")")
-  res.status(201).json(response);
+  console.log("["+new Date().toLocaleString()+"] Fetching directories action = ("+action+") , userId = ("+userId+")")
+  res.status(200).json(response);
 };
 
 export default directoriesQuery;
